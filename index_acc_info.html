@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account & Business Information</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .main-form {
+            flex: 3;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .sidebar {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+        
+        h1 {
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .required-note {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .required-field::after {
+            content: "*";
+            color: #e53e3e;
+            margin-left: 4px;
+        }
+        
+        h2 {
+            color: #1a365d;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: #4a5568;
+        }
+        
+        .form-sublabel {
+            display: block;
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-column {
+            flex: 1;
+        }
+        
+        .checkbox-group {
+            margin: 1rem 0;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+        
+        .checkbox-input {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .policy-info {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .policy-number {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin-bottom: 0.3rem;
+        }
+        
+        .account-number {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+        
+        .business-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .business-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #ebf8ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: #3182ce;
+            font-weight: bold;
+        }
+        
+        .business-name {
+            flex: 1;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .business-status {
+            font-size: 0.8rem;
+            color: #718096;
+        }
+        
+        .add-line {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            color: #3182ce;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .add-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #3182ce;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+        }
+        
+        .select-dropdown {
+            position: relative;
+        }
+        
+        .select-dropdown select {
+            appearance: none;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        .select-dropdown::after {
+            content: "▼";
+            font-size: 0.8rem;
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #718096;
+        }
+        
+        .agency-search {
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            padding: 0.75rem;
+        }
+        
+        .search-result {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #718096;
+        }
+        
+        .search-again {
+            color: #3182ce;
+            text-decoration: none;
+            margin-left: 0.3rem;
+        }
+        
+        .buttons-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2c5282;
+        }
+        
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-form">
+            <h1>Account information</h1>
+            <p class="required-note">Items marked with * are required.</p>
+            
+            <h2>Business information</h2>
+            
+            <div class="form-group">
+                <label class="form-label required-field" for="business-name">First named insured's legal business name</label>
+                <input type="text" id="business-name" class="form-input" value="AUTO POLICY41725">
+                <div class="form-sublabel">Legal business name of the first named insured as filed with the Secretary of State</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="dba-name">Doing business as (DBA) name</label>
+                <input type="text" id="dba-name" class="form-input">
+                <div class="form-sublabel">Typically on signage, website, and marketing</div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-column">
+                    <label class="form-label required-field" for="street-address">Primary location street address</label>
+                    <input type="text" id="street-address" class="form-input" value="8825 N 23rd Ave">
+                </div>
+                <div class="form-column">
+                    <label class="form-label" for="unit-number">Apt./Suite/Unit number</label>
+                    <input type="text" id="unit-number" class="form-input">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-column">
+                    <label class="form-label required-field" for="city">City</label>
+                    <input type="text" id="city" class="form-input" value="Phoenix">
+                </div>
+                <div class="form-column">
+                    <label class="form-label required-field" for="state">State</label>
+                    <div class="select-dropdown">
+                        <select id="state" class="form-input">
+                            <option value="AZ" selected>AZ</option>
+                            <option value="AL">AL</option>
+                            <option value="AK">AK</option>
+                            <option value="AR">AR</option>
+                            <option value="CA">CA</option>
+                            <!-- Add other states as needed -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <label class="form-label required-field" for="zip-code">ZIP Code</label>
+                    <input type="text" id="zip-code" class="form-input" value="85021-4148">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label required-field" for="fire-district">Fire District</label>
+                <div class="select-dropdown">
+                    <select id="fire-district" class="form-input">
+                        <option value="PHOENIX FPSA" selected>PHOENIX FPSA</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox-input" id="different-mailing">
+                    Mailing address is different than the primary location address
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label required-field" for="phone-number">Phone number</label>
+                <input type="tel" id="phone-number" class="form-input" value="+1 651-320-7845">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label required-field" for="legal-entity">Legal entity</label>
+                <div class="select-dropdown">
+                    <select id="legal-entity" class="form-input">
+                        <option value="Association" selected>Association</option>
+                        <option value="Corporation">Corporation</option>
+                        <option value="Individual">Individual</option>
+                        <option value="LLC">LLC</option>
+                        <option value="Partnership">Partnership</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="checkbox-input" id="add-entity">
+                    Add another entity as named insured
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="agency">Agency</label>
+                <div class="agency-search">
+                    020040 - FLAGSTAFF INSURANCE INC - FLAGSTAFF
+                </div>
+                <div class="search-result">
+                    Showing results for 5901106 <a href="#" class="search-again">Search again</a>
+                </div>
+            </div>
+            
+            <div class="buttons-row">
+                <button type="button" class="btn btn-secondary">Back</button>
+                <button type="button" class="btn">Next</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="policy-info">
+                <div class="policy-number">AUTO POLICY41725</div>
+                <div class="account-number">Account #: 98203376</div>
+            </div>
+            
+            <div class="business-item">
+                <div class="business-icon">B</div>
+                <div>
+                    <div class="business-name">Business Auto</div>
+                    <div class="business-status">active</div>
+                </div>
+            </div>
+            
+            <div class="add-line">
+                <div class="add-icon">+</div>
+                <div>Add a Line of Business</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get query parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const policyId = urlParams.get('policy');
+            const businessName = urlParams.get('businessName');
+            const zipCode = urlParams.get('zipCode');
+            
+            // If we have data from the previous page, use it
+            if (businessName) {
+                document.getElementById('business-name').value = decodeURIComponent(businessName);
+            }
+            
+            if (zipCode) {
+                document.getElementById('zip-code').value = zipCode;
+            }
+            
+            // Back button functionality
+            document.querySelector('.btn-secondary').addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            // Next button functionality - In a real app, you would save data and proceed
+            document.querySelector('.btn').addEventListener('click', function() {
+                alert('Information saved successfully!');
+                // window.location.href = 'next-page.html';
+            });
+            
+            // Toggle mailing address section visibility
+            document.getElementById('different-mailing').addEventListener('change', function() {
+                // In a real implementation, you would show/hide mailing address fields
+                console.log('Mailing address checkbox changed:', this.checked);
+            });
+            
+            // Toggle additional entity section visibility
+            document.getElementById('add-entity').addEventListener('change', function() {
+                // In a real implementation, you would show/hide entity fields
+                console.log('Add entity checkbox changed:', this.checked);
+            });
+        });
+    </script>
+</body>
+</html>
