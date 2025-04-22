@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quote Details</title>
+  <!-- Include flatpickr date picker CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+    }
+    .quote-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: normal;
+    }
+    .form-row {
+      display: flex;
+      margin-bottom: 1.5rem;
+      gap: 20px;
+    }
+    .form-group {
+      flex: 1;
+    }
+    .form-group.full-width {
+      width: 100%;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-size: 0.85rem;
+    }
+    .required:after {
+      content: "*";
+      color: #555;
+    }
+    input[type="text"], 
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    /* Style for date inputs */
+    .date-input {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 16px;
+      cursor: pointer;
+    }
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    .date-format {
+      display: block;
+      margin-top: 5px;
+      color: #888;
+      font-size: 0.75rem;
+    }
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .save-button {
+      background-color: #7ecdcf;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .save-button:hover {
+      background-color: #6cbcbe;
+    }
+    .back-button {
+      background-color: #e2e8f0;
+      color: #4a5568;
+      border: 1px solid #ccc;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .back-button:hover {
+      background-color: #cbd5e0;
+    }
+    .back-arrow {
+      margin-right: 5px;
+      width: 16px;
+      height: 16px;
+    }
+    .char-count {
+      text-align: right;
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 5px;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      color: #555;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .description-hint {
+      font-size: 0.75rem;
+      color: #777;
+      margin-top: 5px;
+    }
+    /* Flatpickr calendar customization */
+    .flatpickr-calendar {
+      box-shadow: 0 3px 13px rgba(0,0,0,0.2);
+    }
+    /* Navigation area with back button */
+    .nav-area {
+      padding: 15px 0;
+      max-width: 800px;
+      margin: 0 auto 10px auto;
+    }
+  </style>
+</head>
+<body>
+ 
+
+  <div class="quote-container">
+    <h1>Quote details</h1>
+    
+    <form id="quoteForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required" for="effectiveDate">Effective date</label>
+          <input type="text" id="effectiveDate" class="date-input" placeholder="mm/dd/yyyy" readonly>
+          <span class="date-format">mm/dd/yyyy</span>
+        </div>
+        <div class="form-group">
+          <label class="required" for="expirationDate">Expiration date</label>
+          <input type="text" id="expirationDate" class="date-input" placeholder="mm/dd/yyyy" readonly>
+          <span class="date-format">mm/dd/yyyy</span>
+        </div>
+      </div>
+      
+      <div class="checkbox-label">
+        <input type="checkbox" id="overrideRate">
+        <label for="overrideRate">Override rate as of date</label>
+      </div>
+      
+      <div class="form-group" id="rateAsOfDateGroup" style="margin-top: 10px; margin-bottom: 20px;">
+        <label for="rateAsOfDate">Rate as of date</label>
+        <input type="text" id="rateAsOfDate" class="date-input" placeholder="mm/dd/yyyy" readonly disabled>
+        <span class="date-format">mm/dd/yyyy</span>
+      </div>
+      
+      <div class="form-group full-width">
+        <label for="versionDescription">Version description</label>
+        <input type="text" id="versionDescription" placeholder="Enter version description">
+        <div class="char-count"><span id="versionDescriptionCount">0</span>/90</div>
+      </div>
+      
+      <div class="form-group full-width" style="margin-top: 20px;">
+        <label class="required" for="operationsDescription">Description of operations</label>
+        <textarea id="operationsDescription" placeholder="Describe the operations of the business"></textarea>
+        <div class="description-hint">Describe the operations of the business (e.g. utility excavation and concrete work, concrete work consists of flatwork and foundations for homes and commercial buildings).</div>
+        <div class="char-count"><span id="operationsDescriptionCount">0</span>/60</div>
+      </div>
+      
+      <div class="button-container">
+        <button type="button" id="backButtonForm" class="back-button">Back</button>
+        <button type="button" class="save-button">Save and continue</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Include flatpickr date picker JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  
+  <script>
+    // Initialize the form and elements
+    document.addEventListener('DOMContentLoaded', function() {
+      const overrideRateCheckbox = document.getElementById('overrideRate');
+      const rateAsOfDateInput = document.getElementById('rateAsOfDate');
+      const versionDescriptionInput = document.getElementById('versionDescription');
+      const operationsDescriptionInput = document.getElementById('operationsDescription');
+      const versionDescriptionCount = document.getElementById('versionDescriptionCount');
+      const operationsDescriptionCount = document.getElementById('operationsDescriptionCount');
+      const backButton = document.getElementById('backButton');
+      const backButtonForm = document.getElementById('backButtonForm');
+      
+      // Initialize date pickers
+      const effectiveDatePicker = flatpickr("#effectiveDate", {
+        dateFormat: "m/d/Y",
+        allowInput: false,
+        disableMobile: true
+      });
+      
+      const expirationDatePicker = flatpickr("#expirationDate", {
+        dateFormat: "m/d/Y",
+        allowInput: false,
+        disableMobile: true
+      });
+      
+      const rateAsOfDatePicker = flatpickr("#rateAsOfDate", {
+        dateFormat: "m/d/Y",
+        allowInput: false,
+        disableMobile: true
+      });
+      
+      // Set default expiration date to 1 year after effective date when effective date is selected
+      effectiveDatePicker.config.onChange.push(function(selectedDates, dateStr) {
+        if (selectedDates.length > 0) {
+          const effectiveDate = new Date(selectedDates[0]);
+          const expirationDate = new Date(effectiveDate);
+          expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+          expirationDatePicker.setDate(expirationDate);
+          
+          // Also update rate as of date if override is checked
+          if (overrideRateCheckbox.checked) {
+            rateAsOfDatePicker.setDate(effectiveDate);
+          }
+        }
+      });
+      
+      // Handle the override rate checkbox
+      overrideRateCheckbox.addEventListener('change', function() {
+        rateAsOfDateInput.disabled = !this.checked;
+        
+        if (this.checked) {
+          // If effective date is set, use that value for rate as of date
+          const effectiveDate = effectiveDatePicker.selectedDates[0];
+          if (effectiveDate) {
+            rateAsOfDatePicker.setDate(effectiveDate);
+          }
+          rateAsOfDatePicker.open();
+        }
+      });
+      
+      // Update character count for version description
+      versionDescriptionInput.addEventListener('input', function() {
+        versionDescriptionCount.textContent = this.value.length;
+      });
+      
+      // Update character count for operations description
+      operationsDescriptionInput.addEventListener('input', function() {
+        operationsDescriptionCount.textContent = this.value.length;
+      });
+      
+      // Set initial character counts
+      versionDescriptionCount.textContent = versionDescriptionInput.value.length;
+      operationsDescriptionCount.textContent = operationsDescriptionInput.value.length;
+      
+      // Back button
+      document.querySelector('.back-button').addEventListener('click', function () {
+                window.location.href = 'index_acc_info.html';
+            });
+      
+      function goBackToAccountInfo() {
+        // This function will handle navigation back to the account information page
+        
+        // Check if user has entered any data before navigating away
+        const effectiveDate = document.getElementById('effectiveDate').value;
+        const expirationDate = document.getElementById('expirationDate').value;
+        const versionDescription = document.getElementById('versionDescription').value;
+        const operationsDescription = document.getElementById('operationsDescription').value;
+        
+        if (effectiveDate || expirationDate || versionDescription || operationsDescription) {
+          // If user has entered data, confirm before leaving
+          if (confirm('You have unsaved changes. Are you sure you want to go back without saving?')) {
+            navigateToAccountInfo();
+          }
+        } else {
+          // If no data entered, just navigate back
+          navigateToAccountInfo();
+        }
+      }
+      
+      function navigateToAccountInfo() {
+        // Get the current parameters to preserve them when navigating back
+        const params = new URLSearchParams(window.location.search);
+        const businessName = params.get('businessName');
+        const zipCode = params.get('zipCode');
+        
+        // Navigate back to account information page with parameters
+        window.location.href = `account_information.html${businessName || zipCode ? '?' : ''}${
+          businessName ? 'businessName=' + encodeURIComponent(businessName) : ''}${
+          businessName && zipCode ? '&' : ''}${
+          zipCode ? 'zipCode=' + encodeURIComponent(zipCode) : ''}`;
+      }
+      
+      // Handle form submission
+      document.querySelector('.save-button').addEventListener('click', function() {
+        // Validate required fields
+        const effectiveDate = document.getElementById('effectiveDate').value;
+        const expirationDate = document.getElementById('expirationDate').value;
+        const operationsDescription = document.getElementById('operationsDescription').value;
+        
+        if (!effectiveDate || !expirationDate || !operationsDescription) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        
+        // Process the form (you can replace this with your actual form submission logic)
+        console.log('Form submitted:', {
+          effectiveDate,
+          expirationDate,
+          overrideRate: overrideRateCheckbox.checked,
+          rateAsOfDate: overrideRateCheckbox.checked ? rateAsOfDateInput.value : null,
+          versionDescription: versionDescriptionInput.value,
+          operationsDescription
+        });
+        
+        alert('Form saved successfully!');
+        // You can redirect to the next page here if needed
+        // window.location.href = 'next-page.html';
+      });
+      
+      // Parse URL parameters if they exist
+      const params = new URLSearchParams(window.location.search);
+      
+      // If business name and zip code are passed, you can use them as needed
+      const businessName = params.get('businessName');
+      const zipCode = params.get('zipCode');
+    });
+  </script>
+</body>
+</html>
