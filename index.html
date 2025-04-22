@@ -37,6 +37,15 @@
             margin: 0 auto;
         }
         
+        .selection-section {
+            transition: opacity 0.3s ease;
+        }
+        
+        .selection-section.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
         .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -252,6 +261,24 @@
             text-align: right;
         }
         
+        .selected-summary {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .selected-summary-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .selected-summary-text {
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
             .tiles-grid {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -286,18 +313,25 @@
     </header>
     
     <div class="container">
-        <div class="tiles-grid" id="insurance-tiles">
-            <!-- Tiles will be generated via JavaScript -->
-        </div>
-        
-        <div class="action-bar">
-            <div class="selected-policy" id="selected-policy">No policy selected</div>
-            <button class="btn" id="continue-btn" disabled>Continue</button>
+        <div class="selection-section" id="selection-section">
+            <div class="tiles-grid" id="insurance-tiles">
+                <!-- Tiles will be generated via JavaScript -->
+            </div>
+            
+            <div class="action-bar">
+                <div class="selected-policy" id="selected-policy">No policy selected</div>
+                <button class="btn" id="continue-btn" disabled>Continue</button>
+            </div>
         </div>
         
         <!-- Business Information Form -->
         <div class="business-info-section" id="business-info-section">
             <h2 class="section-title">Business Information</h2>
+            
+            <div class="selected-summary" id="selected-summary">
+                <!-- Selected policy summary will be injected here -->
+            </div>
+            
             <p class="required-note">* All fields are required</p>
             <form id="business-info-form">
                 <table class="form-table">
@@ -326,7 +360,6 @@
                         </td>
                     </tr>
                     
-                   
                 </table>
                 
                 <div class="buttons-row">
@@ -391,10 +424,12 @@
                 }
             ];
             
+            const selectionSection = document.getElementById('selection-section');
             const tilesContainer = document.getElementById('insurance-tiles');
             const selectedPolicyElement = document.getElementById('selected-policy');
             const continueBtn = document.getElementById('continue-btn');
             const businessInfoSection = document.getElementById('business-info-section');
+            const selectedSummary = document.getElementById('selected-summary');
             const backBtn = document.getElementById('back-btn');
             const businessForm = document.getElementById('business-info-form');
             
@@ -449,16 +484,33 @@
                 }
             }
             
-            // Continue button shows the business info form
+            // Continue button shows the business info form and disables policy selection
             continueBtn.addEventListener('click', () => {
+                // Disable the selection section
+                selectionSection.classList.add('disabled');
+                
+                // Show the business info section
                 businessInfoSection.classList.add('visible');
+                
+                // Display selected policy in summary
+                const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+                selectedSummary.innerHTML = `
+                    <div class="selected-summary-icon">${selectedPolicyData.icon}</div>
+                    <div class="selected-summary-text">You've selected: ${selectedPolicyData.title}</div>
+                `;
+                
                 // Scroll to the form
                 businessInfoSection.scrollIntoView({ behavior: 'smooth' });
             });
             
-            // Back button hides the business info form
+            // Back button hides the business info form and enables policy selection
             backBtn.addEventListener('click', () => {
+                // Enable the selection section
+                selectionSection.classList.remove('disabled');
+                
+                // Hide the business info section
                 businessInfoSection.classList.remove('visible');
+                
                 // Scroll back to the top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 
@@ -501,7 +553,6 @@
                     isValid = false;
                 }
                 
-               
                 
                 return isValid;
             }
