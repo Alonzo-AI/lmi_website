@@ -336,14 +336,6 @@
             <form id="business-info-form">
                 <table class="form-table">
                     <tr>
-                        <td class="form-label required-field">Business Name</td>
-                        <td>
-                            <input type="text" class="form-input" id="business-name" required>
-                            <div class="form-hint">Enter the legal name of your business</div>
-                            <div class="error-message" id="business-name-error">Please enter your business name</div>
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="form-label required-field">Zip Code</td>
                         <td>
                             <input type="text" class="form-input" id="zip-code" pattern="[0-9]{5}" required>
@@ -351,6 +343,16 @@
                             <div class="error-message" id="zip-code-error">Please enter a valid 5-digit ZIP code</div>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td class="form-label required-field">Business Name</td>
+                        <td>
+                            <input type="text" class="form-input" id="business-name" required>
+                            <div class="form-hint">Enter the legal name of your business</div>
+                            <div class="error-message" id="business-name-error">Please enter your business name</div>
+                        </td>
+                    </tr>
+                    
                     <tr>
                         <td class="form-label required-field">Business Description or Code</td>
                         <td>
@@ -364,7 +366,9 @@
                 
                 <div class="buttons-row">
                     <button type="button" class="btn btn-secondary" id="back-btn">Back</button>
-                    <button type="submit" class="btn" id="submit-btn">Submit Application</button>
+                    <button type="button" class="btn btn-secondary" id="back-btn">Check appetite</button>
+                    <button type="button" class="btn btn-secondary" id="back-btn">Create account</button>
+                    <button type="submit" class="btn" id="submit-btn">Start quote</button>
                 </div>
             </form>
         </div>
