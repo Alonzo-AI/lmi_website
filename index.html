@@ -113,6 +113,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 2rem;
         }
         
         .selected-policy {
@@ -140,6 +141,117 @@
             cursor: not-allowed;
         }
         
+        /* Business Info Form Styles */
+        .business-info-section {
+            display: none;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .business-info-section.visible {
+            display: block;
+        }
+        
+        .section-title {
+            color: #1a365d;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .form-table td {
+            padding: 1rem;
+            vertical-align: top;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .form-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .form-label {
+            font-weight: bold;
+            color: #4a5568;
+            padding-right: 2rem;
+            width: 30%;
+        }
+        
+        .required-field::after {
+            content: "*";
+            color: #e53e3e;
+            margin-left: 4px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        }
+        
+        .form-input.error {
+            border-color: #e53e3e;
+        }
+        
+        textarea.form-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-hint {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .error-message.visible {
+            display: block;
+        }
+        
+        .buttons-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
+        }
+        
+        .required-note {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            text-align: right;
+        }
+        
         @media (max-width: 768px) {
             .tiles-grid {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -148,6 +260,21 @@
             .action-bar {
                 flex-direction: column;
                 gap: 1rem;
+            }
+            
+            .form-table, .form-table tbody, .form-table tr, .form-table td {
+                display: block;
+                width: 100%;
+            }
+            
+            .form-label {
+                padding-right: 0;
+                padding-bottom: 0.5rem;
+                width: 100%;
+            }
+            
+            .form-table td {
+                padding: 0.75rem 0;
             }
         }
     </style>
@@ -166,6 +293,47 @@
         <div class="action-bar">
             <div class="selected-policy" id="selected-policy">No policy selected</div>
             <button class="btn" id="continue-btn" disabled>Continue</button>
+        </div>
+        
+        <!-- Business Information Form -->
+        <div class="business-info-section" id="business-info-section">
+            <h2 class="section-title">Business Information</h2>
+            <p class="required-note">* All fields are required</p>
+            <form id="business-info-form">
+                <table class="form-table">
+                    <tr>
+                        <td class="form-label required-field">Business Name</td>
+                        <td>
+                            <input type="text" class="form-input" id="business-name" required>
+                            <div class="form-hint">Enter the legal name of your business</div>
+                            <div class="error-message" id="business-name-error">Please enter your business name</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form-label required-field">Zip Code</td>
+                        <td>
+                            <input type="text" class="form-input" id="zip-code" pattern="[0-9]{5}" required>
+                            <div class="form-hint">5-digit ZIP code where your business is located</div>
+                            <div class="error-message" id="zip-code-error">Please enter a valid 5-digit ZIP code</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form-label required-field">Business Description or Code</td>
+                        <td>
+                            <textarea class="form-input" id="business-description" required></textarea>
+                            <div class="form-hint">Describe your business activities and operations/NAICS or SIC code</div>
+                            <div class="error-message" id="business-description-error">Please provide a description of your business</div>
+                        </td>
+                    </tr>
+                    
+                   
+                </table>
+                
+                <div class="buttons-row">
+                    <button type="button" class="btn btn-secondary" id="back-btn">Back</button>
+                    <button type="submit" class="btn" id="submit-btn">Submit Application</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -226,6 +394,10 @@
             const tilesContainer = document.getElementById('insurance-tiles');
             const selectedPolicyElement = document.getElementById('selected-policy');
             const continueBtn = document.getElementById('continue-btn');
+            const businessInfoSection = document.getElementById('business-info-section');
+            const backBtn = document.getElementById('back-btn');
+            const businessForm = document.getElementById('business-info-form');
+            
             let selectedPolicy = null;
             
             // Generate tiles
@@ -277,11 +449,114 @@
                 }
             }
             
-            // Continue button event
+            // Continue button shows the business info form
             continueBtn.addEventListener('click', () => {
+                businessInfoSection.classList.add('visible');
+                // Scroll to the form
+                businessInfoSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Back button hides the business info form
+            backBtn.addEventListener('click', () => {
+                businessInfoSection.classList.remove('visible');
+                // Scroll back to the top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Clear form errors when going back
+                clearFormErrors();
+            });
+            
+            // Function to validate the form
+            function validateForm() {
+                let isValid = true;
+                
+                // Clear previous errors
+                clearFormErrors();
+                
+                // Validate business name
+                const businessName = document.getElementById('business-name');
+                if (!businessName.value.trim()) {
+                    showError(businessName, 'business-name-error');
+                    isValid = false;
+                }
+                
+                // Validate ZIP code
+                const zipCode = document.getElementById('zip-code');
+                if (!zipCode.value.trim() || !zipCode.checkValidity()) {
+                    showError(zipCode, 'zip-code-error');
+                    isValid = false;
+                }
+                
+                // Validate business description
+                const businessDescription = document.getElementById('business-description');
+                if (!businessDescription.value.trim()) {
+                    showError(businessDescription, 'business-description-error');
+                    isValid = false;
+                }
+                
+                // Validate industry code
+                const industryCode = document.getElementById('industry-code');
+                if (!industryCode.value.trim()) {
+                    showError(industryCode, 'industry-code-error');
+                    isValid = false;
+                }
+                
+               
+                
+                return isValid;
+            }
+            
+            // Helper function to show error for a field
+            function showError(inputElement, errorId) {
+                inputElement.classList.add('error');
+                document.getElementById(errorId).classList.add('visible');
+            }
+            
+            // Helper function to clear all form errors
+            function clearFormErrors() {
+                // Remove all error classes from inputs
+                const formInputs = document.querySelectorAll('.form-input');
+                formInputs.forEach(input => input.classList.remove('error'));
+                
+                // Hide all error messages
+                const errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(msg => msg.classList.remove('visible'));
+            }
+            
+            // Add input event listeners to clear errors on input
+            const formInputs = document.querySelectorAll('.form-input');
+            formInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('error');
+                    const errorId = this.id + '-error';
+                    document.getElementById(errorId).classList.remove('visible');
+                });
+            });
+            
+            // Form submission
+            businessForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Validate the form before submission
+                if (!validateForm()) {
+                    return;
+                }
+                
                 const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
-                alert(`You've selected: ${selectedPolicyData.title}`);
-                // In a real app, this would navigate to the next step or submit the selection
+                const businessName = document.getElementById('business-name').value;
+                const zipCode = document.getElementById('zip-code').value;
+                const businessDescription = document.getElementById('business-description').value;
+                const industryCode = document.getElementById('industry-code').value;
+                
+                
+                // In a real app, you would send this data to a server
+                // For now, we'll just show an alert with the collected data
+                alert(`Application submitted successfully!
+                
+Policy: ${selectedPolicyData.title}
+Business: ${businessName}
+ZIP Code: ${zipCode}
+Industry Code: ${industryCode}`);
             });
         });
     </script>
