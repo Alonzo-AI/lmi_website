@@ -441,12 +441,42 @@
             document.getElementById('different-mailing').checked = false;
             document.getElementById('add-entity').checked = false;
     
-            // Next button functionality
             document.querySelector('.btn:not(.btn-secondary)').addEventListener('click', function () {
-                const businessName = encodeURIComponent(document.getElementById('business-name').value);
-                const zipCode = encodeURIComponent(document.getElementById('zip-code').value);
-                window.location.href = `index_quote_details.html?businessName=${businessName}&zipCode=${zipCode}`;
-            });
+    const requiredFields = [
+        'business-name',
+        'street-address',
+        'city',
+        'state',
+        'zip-code',
+        'fire-district',
+        'phone-number',
+        'legal-entity'
+    ];
+
+    let allValid = true;
+    requiredFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value || el.value.trim() === '') {
+            el.style.borderColor = 'red';
+            el.style.boxShadow = '0 0 0 2px rgba(255, 0, 0, 0.2)';
+            allValid = false;
+        } else {
+            el.style.borderColor = '#cbd5e0'; // reset to normal
+            el.style.boxShadow = 'none';
+        }
+    });
+
+    if (!allValid) {
+        alert('Please fill in all required fields before proceeding.');
+        return;
+    }
+
+    // If all valid, continue to next page
+    const businessName = encodeURIComponent(document.getElementById('business-name').value);
+    const zipCode = encodeURIComponent(document.getElementById('zip-code').value);
+    window.location.href = `index_quote_details.html?businessName=${businessName}&zipCode=${zipCode}`;
+});
+
         });
     </script>
     
