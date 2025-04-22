@@ -404,55 +404,45 @@
                 </div>
             </div>
             
-            <div class="add-line">
-                <div class="add-icon">+</div>
-                <div>Add a Line of Business</div>
-            </div>
+           
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get query parameters from URL
+        document.addEventListener('DOMContentLoaded', function () {
+            // Populate fields if params are present
             const urlParams = new URLSearchParams(window.location.search);
-            const policyId = urlParams.get('policy');
             const businessName = urlParams.get('businessName');
             const zipCode = urlParams.get('zipCode');
-            
-            // If we have data from the previous page, use it
+    
             if (businessName) {
                 document.getElementById('business-name').value = decodeURIComponent(businessName);
             }
-            
+    
             if (zipCode) {
-                document.getElementById('zip-code').value = zipCode;
+                document.getElementById('zip-code').value = decodeURIComponent(zipCode);
             }
-            
-            // Back button functionality
-            document.querySelector('.btn-secondary').addEventListener('click', function() {
+    
+            // Back button
+            document.querySelector('.btn-secondary').addEventListener('click', function () {
                 window.location.href = 'index.html';
             });
-            
-            // Next button functionality
-document.querySelector('.btn').addEventListener('click', function() {
-    const businessName = encodeURIComponent(document.getElementById('business-name').value);
-    const zipCode = encodeURIComponent(document.getElementById('zip-code').value);
-    window.location.href = `index_quote_details.html?businessName=${businessName}&zipCode=${zipCode}`;
-});
-
-            
-            // Toggle mailing address section visibility
-            document.getElementById('different-mailing').addEventListener('change', function() {
-                // In a real implementation, you would show/hide mailing address fields
+    
+            // Next button
+            document.querySelector('.btn:not(.btn-secondary)').addEventListener('click', function () {
+                const businessName = encodeURIComponent(document.getElementById('business-name').value);
+                const zipCode = encodeURIComponent(document.getElementById('zip-code').value);
+                window.location.href = `index_quote_details.html?businessName=${businessName}&zipCode=${zipCode}`;
+            });
+    
+            // Optional toggles
+            document.getElementById('different-mailing').addEventListener('change', function () {
                 console.log('Mailing address checkbox changed:', this.checked);
             });
-            
-            // Toggle additional entity section visibility
-            document.getElementById('add-entity').addEventListener('change', function() {
-                // In a real implementation, you would show/hide entity fields
+    
+            document.getElementById('add-entity').addEventListener('change', function () {
                 console.log('Add entity checkbox changed:', this.checked);
             });
         });
     </script>
-</body>
-</html>
+    
