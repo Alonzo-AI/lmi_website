@@ -588,32 +588,45 @@
                 });
             });
             
-            // Form submission
-            businessForm.addEventListener('submit', function(event) {
-                event.preventDefault();
+            // Find the submit button in your original index.html file
+const submitBtn = document.getElementById('submit-btn');
+
+// Add this event listener to replace your existing submit event handler
+submitBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    // Get form values
+    const businessName = document.getElementById('business-name').value;
+    const zipCode = document.getElementById('zip-code').value;
+    const businessDescription = document.getElementById('business-description').value;
+    
+    // Get the selected policy data
+    const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+    
+    // Create the URL with query parameters for the new page
+    let redirectUrl = 'index_acc_info.html'; // Name of the new page you created
+    redirectUrl += `?policy=${selectedPolicy}`;
+    redirectUrl += `&title=${encodeURIComponent(selectedPolicyData.title)}`;
+    redirectUrl += `&icon=${encodeURIComponent(selectedPolicyData.icon)}`;
+    
+    // Add form data to URL
+    if (businessName) {
+        redirectUrl += `&businessName=${encodeURIComponent(businessName)}`;
+    }
+    if (zipCode) {
+        redirectUrl += `&zipCode=${encodeURIComponent(zipCode)}`;
+    }
+    if (businessDescription) {
+        redirectUrl += `&businessDescription=${encodeURIComponent(businessDescription)}`;
+    }
+    
+    // Redirect to the new page
+    window.location.href = redirectUrl;
+});
                 
-                // Validate the form before submission
-                if (!validateForm()) {
-                    return;
-                }
-                
-                const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
-                const businessName = document.getElementById('business-name').value;
-                const zipCode = document.getElementById('zip-code').value;
-                const businessDescription = document.getElementById('business-description').value;
-                const industryCode = document.getElementById('industry-code').value;
-                
-                
-                // In a real app, you would send this data to a server
-                // For now, we'll just show an alert with the collected data
-                alert(`Application submitted successfully!
-                
-Policy: ${selectedPolicyData.title}
-Business: ${businessName}
-ZIP Code: ${zipCode}
-Industry Code: ${industryCode}`);
-            });
-        });
+
+  });
+      
     </script>
 </body>
 </html>
