@@ -287,7 +287,7 @@
             
             <div class="form-group">
                 <label class="form-label required-field" for="business-name">First named insured's legal business name</label>
-                <input type="text" id="business-name" class="form-input" value="AUTO POLICY41725">
+                <input type="text" id="business-name" class="form-input" >
                 <div class="form-sublabel">Legal business name of the first named insured as filed with the Secretary of State</div>
             </div>
             
@@ -300,7 +300,7 @@
             <div class="form-row">
                 <div class="form-column">
                     <label class="form-label required-field" for="street-address">Primary location street address</label>
-                    <input type="text" id="street-address" class="form-input" value="8825 N 23rd Ave">
+                    <input type="text" id="street-address" class="form-input">
                 </div>
                 <div class="form-column">
                     <label class="form-label" for="unit-number">Apt./Suite/Unit number</label>
@@ -311,24 +311,25 @@
             <div class="form-row">
                 <div class="form-column">
                     <label class="form-label required-field" for="city">City</label>
-                    <input type="text" id="city" class="form-input" value="Phoenix">
+                    <input type="text" id="city" class="form-input">
                 </div>
                 <div class="form-column">
                     <label class="form-label required-field" for="state">State</label>
                     <div class="select-dropdown">
                         <select id="state" class="form-input">
-                            <option value="AZ" selected>AZ</option>
+                            <option value="">-- Select State --</option>
+                            <option value="AZ">AZ</option>
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
                             <option value="AR">AR</option>
                             <option value="CA">CA</option>
-                            <!-- Add other states as needed -->
                         </select>
+                        
                     </div>
                 </div>
                 <div class="form-column">
                     <label class="form-label required-field" for="zip-code">ZIP Code</label>
-                    <input type="text" id="zip-code" class="form-input" value="85021-4148">
+                    <input type="text" id="zip-code" class="form-input">
                 </div>
             </div>
             
@@ -336,9 +337,11 @@
                 <label class="form-label required-field" for="fire-district">Fire District</label>
                 <div class="select-dropdown">
                     <select id="fire-district" class="form-input">
-                        <option value="PHOENIX FPSA" selected>PHOENIX FPSA</option>
+                        <option value="">-- Select District --</option>
+                        <option value="PHOENIX FPSA">PHOENIX FPSA</option>
                         <option value="OTHER">OTHER</option>
                     </select>
+                    
                 </div>
             </div>
             
@@ -351,19 +354,21 @@
             
             <div class="form-group">
                 <label class="form-label required-field" for="phone-number">Phone number</label>
-                <input type="tel" id="phone-number" class="form-input" value="+1 651-320-7845">
+                <input type="tel" id="phone-number" class="form-input" >
             </div>
             
             <div class="form-group">
                 <label class="form-label required-field" for="legal-entity">Legal entity</label>
                 <div class="select-dropdown">
                     <select id="legal-entity" class="form-input">
-                        <option value="Association" selected>Association</option>
+                        <option value="">-- Select Entity --</option>
+                        <option value="Association">Association</option>
                         <option value="Corporation">Corporation</option>
                         <option value="Individual">Individual</option>
                         <option value="LLC">LLC</option>
                         <option value="Partnership">Partnership</option>
                     </select>
+                    
                 </div>
             </div>
             
@@ -377,7 +382,7 @@
             <div class="form-group">
                 <label class="form-label" for="agency">Agency</label>
                 <div class="agency-search">
-                    020040 - FLAGSTAFF INSURANCE INC - FLAGSTAFF
+                   
                 </div>
                 <div class="search-result">
                     Showing results for 5901106 <a href="#" class="search-again">Search again</a>
@@ -410,39 +415,40 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Populate fields if params are present
-            const urlParams = new URLSearchParams(window.location.search);
-            const businessName = urlParams.get('businessName');
-            const zipCode = urlParams.get('zipCode');
-    
-            if (businessName) {
-                document.getElementById('business-name').value = decodeURIComponent(businessName);
-            }
-    
-            if (zipCode) {
-                document.getElementById('zip-code').value = decodeURIComponent(zipCode);
-            }
-    
             // Back button
             document.querySelector('.btn-secondary').addEventListener('click', function () {
                 window.location.href = 'index.html';
             });
     
-            // Next button
+            // Populate fields from URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const businessName = params.get('businessName') || '';
+            const zipCode = params.get('zipCode') || '';
+    
+            // Set values for business name and zip code
+            document.getElementById('business-name').value = decodeURIComponent(businessName);
+            document.getElementById('zip-code').value = decodeURIComponent(zipCode);
+    
+            // Clear all other fields
+            document.getElementById('dba-name').value = '';
+            document.getElementById('street-address').value = '';
+            document.getElementById('unit-number').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            document.getElementById('fire-district').value = '';
+            document.getElementById('phone-number').value = '';
+            document.getElementById('legal-entity').value = '';
+            document.getElementById('different-mailing').checked = false;
+            document.getElementById('add-entity').checked = false;
+    
+            // Next button functionality
             document.querySelector('.btn:not(.btn-secondary)').addEventListener('click', function () {
                 const businessName = encodeURIComponent(document.getElementById('business-name').value);
                 const zipCode = encodeURIComponent(document.getElementById('zip-code').value);
                 window.location.href = `index_quote_details.html?businessName=${businessName}&zipCode=${zipCode}`;
             });
-    
-            // Optional toggles
-            document.getElementById('different-mailing').addEventListener('change', function () {
-                console.log('Mailing address checkbox changed:', this.checked);
-            });
-    
-            document.getElementById('add-entity').addEventListener('change', function () {
-                console.log('Add entity checkbox changed:', this.checked);
-            });
         });
     </script>
+    
+    
     
