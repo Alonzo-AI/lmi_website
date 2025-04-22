@@ -48,7 +48,7 @@
         }
         
         .required-note {
-            color: #666;
+            color: #e53e3e;
             margin-bottom: 1.5rem;
             font-size: 0.9rem;
         }
@@ -433,11 +433,13 @@
                 window.location.href = 'index.html';
             });
             
-            // Next button functionality - In a real app, you would save data and proceed
-            document.querySelector('.btn').addEventListener('click', function() {
-                alert('Information saved successfully!');
-                // window.location.href = 'next-page.html';
-            });
+            // Next button functionality
+document.querySelector('.btn').addEventListener('click', function() {
+    const businessName = encodeURIComponent(document.getElementById('business-name').value);
+    const zipCode = encodeURIComponent(document.getElementById('zip-code').value);
+    window.location.href = `index_quote_details.html?businessName=${businessName}&zipCode=${zipCode}`;
+});
+
             
             // Toggle mailing address section visibility
             document.getElementById('different-mailing').addEventListener('change', function() {
