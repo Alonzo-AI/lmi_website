@@ -115,7 +115,7 @@
             align-items: center;
         }
         
-        .selected-count {
+        .selected-policy {
             font-weight: bold;
             color: #2d3748;
         }
@@ -155,7 +155,7 @@
 <body>
     <header>
         <h1>Choose Your Insurance Coverage</h1>
-        <p class="subtitle">Select the insurance policies that meet your needs</p>
+        <p class="subtitle">Select one insurance policy that meets your needs</p>
     </header>
     
     <div class="container">
@@ -164,7 +164,7 @@
         </div>
         
         <div class="action-bar">
-            <div class="selected-count" id="selected-count">No policies selected</div>
+            <div class="selected-policy" id="selected-policy">No policy selected</div>
             <button class="btn" id="continue-btn" disabled>Continue</button>
         </div>
     </div>
@@ -224,9 +224,9 @@
             ];
             
             const tilesContainer = document.getElementById('insurance-tiles');
-            const selectedCountElement = document.getElementById('selected-count');
+            const selectedPolicyElement = document.getElementById('selected-policy');
             const continueBtn = document.getElementById('continue-btn');
-            let selectedPolicies = [];
+            let selectedPolicy = null;
             
             // Generate tiles
             insurancePolicies.forEach(policy => {
@@ -241,42 +241,46 @@
                     <div class="selected-badge">✓</div>
                 `;
                 
-                tile.addEventListener('click', () => toggleSelection(policy.id, tile));
+                tile.addEventListener('click', () => selectPolicy(policy, tile));
                 tilesContainer.appendChild(tile);
             });
             
-            // Toggle tile selection
-            function toggleSelection(policyId, tileElement) {
-                if (selectedPolicies.includes(policyId)) {
-                    // Remove from selection
-                    selectedPolicies = selectedPolicies.filter(id => id !== policyId);
-                    tileElement.classList.remove('selected');
+            // Select policy function - only allows one selection
+            function selectPolicy(policy, tileElement) {
+                // Clear any existing selection
+                const allTiles = document.querySelectorAll('.tile');
+                allTiles.forEach(tile => tile.classList.remove('selected'));
+                
+                // Set new selection
+                if (selectedPolicy === policy.id) {
+                    // If clicking on the already selected tile, deselect it
+                    selectedPolicy = null;
                 } else {
-                    // Add to selection
-                    selectedPolicies.push(policyId);
+                    // Select the new tile
+                    selectedPolicy = policy.id;
                     tileElement.classList.add('selected');
                 }
                 
-                // Update selected count and button state
-                updateSelectedCount();
+                // Update display and button state
+                updateSelectedDisplay();
             }
             
-            // Update selected count and button state
-            function updateSelectedCount() {
-                const count = selectedPolicies.length;
-                
-                if (count === 0) {
-                    selectedCountElement.textContent = 'No policies selected';
+            // Update selected display and button state
+            function updateSelectedDisplay() {
+                if (!selectedPolicy) {
+                    selectedPolicyElement.textContent = 'No policy selected';
                     continueBtn.disabled = true;
                 } else {
-                    selectedCountElement.textContent = `${count} ${count === 1 ? 'policy' : 'policies'} selected`;
+                    const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+                    selectedPolicyElement.textContent = `Selected: ${selectedPolicyData.title}`;
                     continueBtn.disabled = false;
                 }
             }
             
             // Continue button event
             continueBtn.addEventListener('click', () => {
-                alert(`You've selected ${selectedPolicies.length} policies: ${selectedPolicies.join(', ')}`);
+                const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+                alert(`You've selected: ${selectedPolicyData.title}`);
                 // In a real app, this would navigate to the next step or submit the selection
             });
         });
