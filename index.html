@@ -376,251 +376,305 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Insurance policy data
-            const insurancePolicies = [
-                {
-                    id: 'property',
-                    title: 'Property Insurance',
-                    icon: '🏢',
-                    description: 'Protection for your business property against damage from fire, theft, and natural disasters.'
-                },
-                {
-                    id: 'liability',
-                    title: 'Liability Insurance',
-                    icon: '⚖️',
-                    description: 'Coverage for legal responsibilities to others for bodily injury or property damage.'
-                },
-                {
-                    id: 'auto',
-                    title: 'Auto Insurance',
-                    icon: '🚗',
-                    description: 'Protection for your business vehicles against accidents, theft, and liability.'
-                },
-                {
-                    id: 'workers-comp',
-                    title: 'Workers Compensation',
-                    icon: '👷',
-                    description: 'Coverage for employee medical expenses and lost wages due to work-related injuries.'
-                },
-                {
-                    id: 'umbrella',
-                    title: 'Umbrella Insurance',
-                    icon: '☂️',
-                    description: 'Additional liability coverage that goes beyond your standard insurance policies.'
-                },
-                {
-                    id: 'cyber',
-                    title: 'Cyber Insurance',
-                    icon: '🔒',
-                    description: 'Protection against data breaches, cyber attacks, and other digital risks.'
-                },
-                {
-                    id: 'professional',
-                    title: 'Professional Liability',
-                    icon: '👔',
-                    description: 'Coverage for claims of negligence or failing to perform your professional duties.'
-                },
-                {
-                    id: 'business-interruption',
-                    title: 'Business Interruption',
-                    icon: '⏱️',
-                    description: 'Compensation for lost income during periods when you cannot operate your business.'
-                }
-            ];
-            
-            const selectionSection = document.getElementById('selection-section');
-            const tilesContainer = document.getElementById('insurance-tiles');
-            const selectedPolicyElement = document.getElementById('selected-policy');
-            const continueBtn = document.getElementById('continue-btn');
-            const businessInfoSection = document.getElementById('business-info-section');
-            const selectedSummary = document.getElementById('selected-summary');
-            const backBtn = document.getElementById('back-btn');
-            const businessForm = document.getElementById('business-info-form');
-            const validationMessage = document.getElementById('validation-message');
-            
-            let selectedPolicy = null;
-            
-            // Generate tiles
-            insurancePolicies.forEach(policy => {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.dataset.id = policy.id;
-                
-                tile.innerHTML = `
-                    <div class="tile-icon">${policy.icon}</div>
-                    <h3 class="tile-title">${policy.title}</h3>
-                    <p class="tile-description">${policy.description}</p>
-                    <div class="selected-badge">✓</div>
-                `;
-                
-                tile.addEventListener('click', () => selectPolicy(policy, tile));
-                tilesContainer.appendChild(tile);
-            });
-            
-            // Select policy function - only allows one selection
-            function selectPolicy(policy, tileElement) {
-                // Clear any existing selection
-                const allTiles = document.querySelectorAll('.tile');
-                allTiles.forEach(tile => tile.classList.remove('selected'));
-                
-                // Set new selection
-                if (selectedPolicy === policy.id) {
-                    // If clicking on the already selected tile, deselect it
-                    selectedPolicy = null;
-                } else {
-                    // Select the new tile
-                    selectedPolicy = policy.id;
-                    tileElement.classList.add('selected');
-                }
-                
-                // Update display and button state
-                updateSelectedDisplay();
+    // Insurance policy data
+    const insurancePolicies = [
+        {
+            id: 'property',
+            title: 'Property Insurance',
+            icon: '🏢',
+            description: 'Protection for your business property against damage from fire, theft, and natural disasters.'
+        },
+        {
+            id: 'liability',
+            title: 'Liability Insurance',
+            icon: '⚖️',
+            description: 'Coverage for legal responsibilities to others for bodily injury or property damage.'
+        },
+        {
+            id: 'auto',
+            title: 'Auto Insurance',
+            icon: '🚗',
+            description: 'Protection for your business vehicles against accidents, theft, and liability.'
+        },
+        {
+            id: 'workers-comp',
+            title: 'Workers Compensation',
+            icon: '👷',
+            description: 'Coverage for employee medical expenses and lost wages due to work-related injuries.'
+        },
+        {
+            id: 'umbrella',
+            title: 'Umbrella Insurance',
+            icon: '☂️',
+            description: 'Additional liability coverage that goes beyond your standard insurance policies.'
+        },
+        {
+            id: 'cyber',
+            title: 'Cyber Insurance',
+            icon: '🔒',
+            description: 'Protection against data breaches, cyber attacks, and other digital risks.'
+        },
+        {
+            id: 'professional',
+            title: 'Professional Liability',
+            icon: '👔',
+            description: 'Coverage for claims of negligence or failing to perform your professional duties.'
+        },
+        {
+            id: 'business-interruption',
+            title: 'Business Interruption',
+            icon: '⏱️',
+            description: 'Compensation for lost income during periods when you cannot operate your business.'
+        }
+    ];
+    
+    const selectionSection = document.getElementById('selection-section');
+    const tilesContainer = document.getElementById('insurance-tiles');
+    const selectedPolicyElement = document.getElementById('selected-policy');
+    const continueBtn = document.getElementById('continue-btn');
+    const businessInfoSection = document.getElementById('business-info-section');
+    const selectedSummary = document.getElementById('selected-summary');
+    const backBtn = document.getElementById('back-btn');
+    const businessForm = document.getElementById('business-info-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const validationMessage = document.createElement('div'); // Create a validation message element
+    
+    // Set up the validation message
+    validationMessage.className = 'error-message';
+    validationMessage.textContent = 'Please correct the errors in the form';
+    validationMessage.style.display = 'none';
+    validationMessage.style.textAlign = 'center';
+    validationMessage.style.marginBottom = '1rem';
+    businessInfoSection.insertBefore(validationMessage, businessInfoSection.querySelector('form'));
+    
+    let selectedPolicy = null;
+    
+    // Generate tiles
+    insurancePolicies.forEach(policy => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.dataset.id = policy.id;
+        
+        tile.innerHTML = `
+            <div class="tile-icon">${policy.icon}</div>
+            <h3 class="tile-title">${policy.title}</h3>
+            <p class="tile-description">${policy.description}</p>
+            <div class="selected-badge">✓</div>
+        `;
+        
+        tile.addEventListener('click', () => selectPolicy(policy, tile));
+        tilesContainer.appendChild(tile);
+    });
+    
+    // Select policy function - only allows one selection
+    function selectPolicy(policy, tileElement) {
+        // Clear any existing selection
+        const allTiles = document.querySelectorAll('.tile');
+        allTiles.forEach(tile => tile.classList.remove('selected'));
+        
+        // Set new selection
+        if (selectedPolicy === policy.id) {
+            // If clicking on the already selected tile, deselect it
+            selectedPolicy = null;
+        } else {
+            // Select the new tile
+            selectedPolicy = policy.id;
+            tileElement.classList.add('selected');
+        }
+        
+        // Update display and button state
+        updateSelectedDisplay();
+    }
+    
+    // Update selected display and button state
+    function updateSelectedDisplay() {
+        if (!selectedPolicy) {
+            selectedPolicyElement.textContent = 'No policy selected';
+            continueBtn.disabled = true;
+        } else {
+            const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+            selectedPolicyElement.textContent = `Selected: ${selectedPolicyData.title}`;
+            continueBtn.disabled = false;
+        }
+    }
+    
+    // Continue button shows the business info form and disables policy selection
+    continueBtn.addEventListener('click', () => {
+        // Disable the selection section
+        selectionSection.classList.add('disabled');
+        
+        // Show the business info section
+        businessInfoSection.classList.add('visible');
+        
+        // Display selected policy in summary
+        const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+        selectedSummary.innerHTML = `
+            <div class="selected-summary-icon">${selectedPolicyData.icon}</div>
+            <div class="selected-summary-text">You've selected: ${selectedPolicyData.title}</div>
+        `;
+        
+        // Scroll to the form
+        businessInfoSection.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Back button hides the business info form and enables policy selection
+    backBtn.addEventListener('click', () => {
+        // Enable the selection section
+        selectionSection.classList.remove('disabled');
+        
+        // Hide the business info section
+        businessInfoSection.classList.remove('visible');
+        
+        // Scroll back to the top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Clear form errors when going back
+        clearFormErrors();
+    });
+    
+    // Function to validate the form
+    function validateForm() {
+        let isValid = true;
+        
+        // Clear previous errors
+        clearFormErrors();
+        
+        // Validate business name
+        const businessName = document.getElementById('business-name');
+        if (!businessName.value.trim()) {
+            showError(businessName, 'business-name-error');
+            isValid = false;
+        }
+        
+        // Validate ZIP code
+        const zipCode = document.getElementById('zip-code');
+        if (!zipCode.value.trim() || !zipCode.checkValidity()) {
+            showError(zipCode, 'zip-code-error');
+            isValid = false;
+        }
+        
+        // Validate business description
+        const businessDescription = document.getElementById('business-description');
+        if (!businessDescription.value.trim()) {
+            showError(businessDescription, 'business-description-error');
+            isValid = false;
+        }
+        
+        // Check if industry code element exists before validating
+        const industryCode = document.getElementById('industry-code');
+        if (industryCode && !industryCode.value.trim()) {
+            showError(industryCode, 'industry-code-error');
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    // Helper function to show error for a field
+    function showError(inputElement, errorId) {
+        inputElement.classList.add('error');
+        const errorElement = document.getElementById(errorId);
+        if (errorElement) {
+            errorElement.classList.add('visible');
+        }
+    }
+    
+    // Helper function to clear all form errors
+    function clearFormErrors() {
+        // Remove all error classes from inputs
+        const formInputs = document.querySelectorAll('.form-input');
+        formInputs.forEach(input => input.classList.remove('error'));
+        
+        // Hide all error messages
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.classList.remove('visible'));
+        
+        // Hide the main validation message
+        validationMessage.style.display = 'none';
+    }
+    
+    // Add input event listeners to clear errors on input
+    const formInputs = document.querySelectorAll('.form-input');
+    formInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('error');
+            const errorId = this.id + '-error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.classList.remove('visible');
             }
-            
-            // Update selected display and button state
-            function updateSelectedDisplay() {
-                if (!selectedPolicy) {
-                    selectedPolicyElement.textContent = 'No policy selected';
-                    continueBtn.disabled = true;
-                } else {
-                    const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
-                    selectedPolicyElement.textContent = `Selected: ${selectedPolicyData.title}`;
-                    continueBtn.disabled = false;
-                }
-            }
-            
-            // Continue button shows the business info form and disables policy selection
-            continueBtn.addEventListener('click', () => {
-                // Disable the selection section
-                selectionSection.classList.add('disabled');
-                
-                // Show the business info section
-                businessInfoSection.classList.add('visible');
-                
-                // Display selected policy in summary
-                const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
-                selectedSummary.innerHTML = `
-                    <div class="selected-summary-icon">${selectedPolicyData.icon}</div>
-                    <div class="selected-summary-text">You've selected: ${selectedPolicyData.title}</div>
-                `;
-                
-                // Scroll to the form
-                businessInfoSection.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            // Back button hides the business info form and enables policy selection
-            backBtn.addEventListener('click', () => {
-                // Enable the selection section
-                selectionSection.classList.remove('disabled');
-                
-                // Hide the business info section
-                businessInfoSection.classList.remove('visible');
-                
-                // Scroll back to the top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // Clear form errors when going back
-                clearFormErrors();
-            });
-            
-            // Function to validate the form
-            function validateForm() {
-                let isValid = true;
-                
-                // Clear previous errors
-                clearFormErrors();
-                
-                // Validate business name
-                const businessName = document.getElementById('business-name');
-                if (!businessName.value.trim()) {
-                    showError(businessName, 'business-name-error');
-                    isValid = false;
-                }
-                
-                // Validate ZIP code
-                const zipCode = document.getElementById('zip-code');
-                if (!zipCode.value.trim() || !zipCode.checkValidity()) {
-                    showError(zipCode, 'zip-code-error');
-                    isValid = false;
-                }
-                
-                // Validate business description
-                const businessDescription = document.getElementById('business-description');
-                if (!businessDescription.value.trim()) {
-                    showError(businessDescription, 'business-description-error');
-                    isValid = false;
-                }
-                
-                return isValid;
-            }
-            
-            // Helper function to show error for a field
-            function showError(inputElement, errorId) {
-                inputElement.classList.add('error');
-                document.getElementById(errorId).classList.add('visible');
-            }
-            
-            // Helper function to clear all form errors
-            function clearFormErrors() {
-                // Remove all error classes from inputs
-                const formInputs = document.querySelectorAll('.form-input');
-                formInputs.forEach(input => input.classList.remove('error'));
-                
-                // Hide all error messages
-                const errorMessages = document.querySelectorAll('.error-message');
-                errorMessages.forEach(msg => msg.classList.remove('visible'));
-                
-                // Hide validation message
-                validationMessage.style.display = 'none';
-            }
-            
-            // Add input event listeners to clear errors on input
-            const formInputs = document.querySelectorAll('.form-input');
-            formInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    this.classList.remove('error');
-                    const errorId = this.id + '-error';
-                    const errorElement = document.getElementById(errorId);
-                    if (errorElement) {
-                        errorElement.classList.remove('visible');
-                    }
-                });
-            });
-            
-            // Form submission handler
-            businessForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                if (validateForm()) {
-                    // Get form values
-                    const businessName = document.getElementById('business-name').value;
-                    const zipCode = document.getElementById('zip-code').value;
-                    const businessDescription = document.getElementById('business-description').value;
-                    
-                    // Get the selected policy data
-                    const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
-                    
-                    // Create the URL with query parameters for the next page
-                    let redirectUrl = 'index_acc_info.html';
-                    redirectUrl += `?policy=${selectedPolicy}`;
-                    redirectUrl += `&title=${encodeURIComponent(selectedPolicyData.title)}`;
-                    redirectUrl += `&icon=${encodeURIComponent(selectedPolicyData.icon)}`;
-                    
-                    // Add form data to URL
-                    redirectUrl += `&businessName=${encodeURIComponent(businessName)}`;
-                    redirectUrl += `&zipCode=${encodeURIComponent(zipCode)}`;
-                    redirectUrl += `&businessDescription=${encodeURIComponent(businessDescription)}`;
-                    
-                    // Redirect to the next page
-                    window.location.href = redirectUrl;
-                } else {
-                    // Show validation message
-                    validationMessage.style.display = 'block';
-                    // Scroll to the top of the form
-                    businessInfoSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
         });
+    });
+    
+    // Submit button click handler - FIXED to properly redirect
+    submitBtn.addEventListener('click', function(event) {
+        // Prevent default form behavior
+        event.preventDefault();
+        
+        console.log("Submit button clicked");
+        
+        if (validateForm()) {
+            // Get form values
+            const businessName = document.getElementById('business-name').value;
+            const zipCode = document.getElementById('zip-code').value;
+            const businessDescription = document.getElementById('business-description').value;
+            
+            // Get the selected policy data
+            const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+            
+            // Create the URL with query parameters for the next page
+            let redirectUrl = 'index_acc_info.html';
+            redirectUrl += `?policy=${selectedPolicy}`;
+            redirectUrl += `&title=${encodeURIComponent(selectedPolicyData.title)}`;
+            redirectUrl += `&icon=${encodeURIComponent(selectedPolicyData.icon)}`;
+            
+            // Add form data to URL
+            redirectUrl += `&businessName=${encodeURIComponent(businessName)}`;
+            redirectUrl += `&zipCode=${encodeURIComponent(zipCode)}`;
+            redirectUrl += `&businessDescription=${encodeURIComponent(businessDescription)}`;
+            
+            console.log("Redirecting to:", redirectUrl);
+            
+            // Force redirect to the next page
+            window.location.href = redirectUrl;
+            
+            // Alternative redirect method if the above doesn't work
+            setTimeout(function() {
+                window.location.replace(redirectUrl);
+            }, 100);
+            
+            return false; // Ensure no further code execution
+        } else {
+            // Show validation message
+            validationMessage.style.display = 'block';
+            // Scroll to the top of the form
+            businessInfoSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+    
+    // Prevent default form submission
+    businessForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log("Form submission prevented");
+        
+        // Trigger the submit button click handler
+        submitBtn.click();
+        
+        return false;
+    });
+    
+    // Assign click handlers to all "Start quote" buttons if there are multiple
+    const startQuoteButtons = document.querySelectorAll('button[type="submit"]');
+    startQuoteButtons.forEach(button => {
+        if (button !== submitBtn) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                submitBtn.click();
+            });
+        }
+    });
+});
+      
     </script>
 </body>
 </html>
