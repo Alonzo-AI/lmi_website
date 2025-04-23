@@ -436,6 +436,7 @@
             const selectedSummary = document.getElementById('selected-summary');
             const backBtn = document.getElementById('back-btn');
             const businessForm = document.getElementById('business-info-form');
+            const validationMessage = document.getElementById('validation-message');
             
             let selectedPolicy = null;
             
@@ -550,14 +551,6 @@
                     isValid = false;
                 }
                 
-                // Validate industry code
-                const industryCode = document.getElementById('industry-code');
-                if (!industryCode.value.trim()) {
-                    showError(industryCode, 'industry-code-error');
-                    isValid = false;
-                }
-                
-                
                 return isValid;
             }
             
@@ -576,6 +569,9 @@
                 // Hide all error messages
                 const errorMessages = document.querySelectorAll('.error-message');
                 errorMessages.forEach(msg => msg.classList.remove('visible'));
+                
+                // Hide validation message
+                validationMessage.style.display = 'none';
             }
             
             // Add input event listeners to clear errors on input
@@ -584,49 +580,47 @@
                 input.addEventListener('input', function() {
                     this.classList.remove('error');
                     const errorId = this.id + '-error';
-                    document.getElementById(errorId).classList.remove('visible');
+                    const errorElement = document.getElementById(errorId);
+                    if (errorElement) {
+                        errorElement.classList.remove('visible');
+                    }
                 });
             });
             
-            // Find the submit button in your original index.html file
-const submitBtn = document.getElementById('submit-btn');
-
-// Add this event listener to replace your existing submit event handler
-submitBtn.addEventListener('click', function(event) {
-    event.preventDefault();
-    
-    // Get form values
-    const businessName = document.getElementById('business-name').value;
-    const zipCode = document.getElementById('zip-code').value;
-    const businessDescription = document.getElementById('business-description').value;
-    
-    // Get the selected policy data
-    const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
-    
-    // Create the URL with query parameters for the new page
-    let redirectUrl = 'index_acc_info.html'; // Name of the new page you created
-    redirectUrl += `?policy=${selectedPolicy}`;
-    redirectUrl += `&title=${encodeURIComponent(selectedPolicyData.title)}`;
-    redirectUrl += `&icon=${encodeURIComponent(selectedPolicyData.icon)}`;
-    
-    // Add form data to URL
-    if (businessName) {
-        redirectUrl += `&businessName=${encodeURIComponent(businessName)}`;
-    }
-    if (zipCode) {
-        redirectUrl += `&zipCode=${encodeURIComponent(zipCode)}`;
-    }
-    if (businessDescription) {
-        redirectUrl += `&businessDescription=${encodeURIComponent(businessDescription)}`;
-    }
-    
-    // Redirect to the new page
-    window.location.href = redirectUrl;
-});
+            // Form submission handler
+            businessForm.addEventListener('submit', function(event) {
+                event.preventDefault();
                 
-
-  });
-      
+                if (validateForm()) {
+                    // Get form values
+                    const businessName = document.getElementById('business-name').value;
+                    const zipCode = document.getElementById('zip-code').value;
+                    const businessDescription = document.getElementById('business-description').value;
+                    
+                    // Get the selected policy data
+                    const selectedPolicyData = insurancePolicies.find(p => p.id === selectedPolicy);
+                    
+                    // Create the URL with query parameters for the next page
+                    let redirectUrl = 'index_acc_info.html';
+                    redirectUrl += `?policy=${selectedPolicy}`;
+                    redirectUrl += `&title=${encodeURIComponent(selectedPolicyData.title)}`;
+                    redirectUrl += `&icon=${encodeURIComponent(selectedPolicyData.icon)}`;
+                    
+                    // Add form data to URL
+                    redirectUrl += `&businessName=${encodeURIComponent(businessName)}`;
+                    redirectUrl += `&zipCode=${encodeURIComponent(zipCode)}`;
+                    redirectUrl += `&businessDescription=${encodeURIComponent(businessDescription)}`;
+                    
+                    // Redirect to the next page
+                    window.location.href = redirectUrl;
+                } else {
+                    // Show validation message
+                    validationMessage.style.display = 'block';
+                    // Scroll to the top of the form
+                    businessInfoSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
     </script>
 </body>
 </html>
