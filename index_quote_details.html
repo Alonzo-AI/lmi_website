@@ -45,9 +45,11 @@
       font-size: 0.85rem;
     }
     .required:after {
-      content: "*";
-      color: #555;
-    }
+  content: "*";
+  color: red;
+  margin-left: 4px;
+}
+
     input[type="text"], 
     textarea {
       width: 100%;
@@ -277,8 +279,22 @@
 
       // Save button
       document.querySelector('.save-button').addEventListener('click', function () {
-                window.location.href = 'index_business_info.html';
-            });      
+  const effectiveDate = document.getElementById('effectiveDate').value;
+  const expirationDate = document.getElementById('expirationDate').value;
+  const operationsDescription = document.getElementById('operationsDescription').value;
+
+  if (!effectiveDate || !expirationDate || !operationsDescription.trim()) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  // Optionally show a success message
+  // alert('Form saved successfully!');
+
+  // Now redirect to the next page
+  window.location.href = 'index_business_info.html';
+});
+      
       
       function goBackToAccountInfo() {
         // This function will handle navigation back to the account information page
