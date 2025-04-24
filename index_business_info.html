@@ -267,107 +267,149 @@
             line-height: 1.5;
             margin-bottom: 10px;
         }
+
+        /* Styles for the separate policy info box */
+.policy-info-box {
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 30px;
+    width: 250px;
+    float: right;
+    clear: right;
+    margin-left: 20px;
+}
+
+/* Ensure the business icon displays correctly */
+.business-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* Fix layout breakages from form changes */
+.section::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Optional: force consistent vertical spacing */
+.section {
+    margin-bottom: 40px;
+}
+
+
     </style>
 </head>
 <body>
     <div class="document">
-        <!-- Business Information Section - Separated into its own box -->
-<div class="section">
-    <div class="section-header">Business information</div>
-    <div class="section-subheader">Items marked with * are required</div>
+
+         <!-- Standalone Policy Info Box - Completely separate from Principal business owner -->
+<div class="section policy-info-box">
+    <div class="section-header">Policy Information</div>
     
-    <div class="form-row">
-        <div class="form-group">
-            <label for="business-desc">Business description or SIC*</label>
-            <select id="business-desc">
-                <option>Candle Or Candleholders Mfrers (SIC No. 3999)</option>
-            </select>
-        </div>
-        <div style="width: 80px; margin-top: 20px;">
-            <button class="reset-btn">Reset</button>
-        </div>
-    </div>
+    <div>AUTO POLICY#725</div>
+    <div>Account # 00053376</div>
     
-    <div class="add-line">
-        <div class="add-icon">+</div> Add a Line of Business
+    <div style="margin-top: 10px;">
+        <span class="business-icon"></span>
+        <span>Business Auto</span>
     </div>
 </div>
+        <!-- Business Information Section - Separated into its own box -->
+        <div class="section">
+            <div class="section-header">Business information</div>
+            <div class="section-subheader">Items marked with * are required</div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="business-desc">Business description or SIC*</label>
+                    <select id="business-desc">
+                        <option value="">-- Select --</option>
+                        <option>Candle Or Candleholders Mfrers (SIC No. 3999)</option>
+                    </select>
+                </div>
+                <div style="width: 80px; margin-top: 20px;">
+                    <button class="reset-btn">Reset</button>
+                </div>
+            </div>
+
+            <div class="add-line">
+                <div class="add-icon">+</div> Add a Line of Business
+            </div>
+        </div>
             
             <!-- Eligibility Details Section - Separated into its own box -->
-<div class="section">
-    <div class="section-header">Eligibility details</div>
-    <div class="section-subheader">Items marked with * are required</div>
+            <div class="section">
+                <div class="section-header">Eligibility details</div>
+                <div class="section-subheader">Items marked with * are required</div>
     
-    <div class="eligibility-question">
-        Has the customer had 2 or more moving violations or convictions or 2 or more non-negligent accidents within the last 3 years?
-    </div>
+                <div class="eligibility-question">
+                    Has the customer had 2 or more moving violations or convictions or 2 or more non-negligent accidents within the last 3 years?
+                </div>
     
-    <div class="radio-group">
-        <label class="radio-option">
-            <input type="radio" name="violations"> Yes
-        </label>
-        <label class="radio-option">
-            <input type="radio" name="violations" checked> No
-        </label>
-    </div>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="violations"> Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="violations"> No
+                    </label>
+                </div>
     
-    <div class="eligibility-question" style="margin-top: 15px;">
-        Is a supporting policy such as BOP, Package, ML, Property, or Form being quoted or already written with Liberty Mutual? Note, ML is not considered a supporting policy.
-    </div>
+                <div class="eligibility-question" style="margin-top: 15px;">
+                    Is a supporting policy such as BOP, Package, ML, Property, or Form being quoted or already written with Liberty Mutual?
+                </div>
     
-    <div class="radio-group">
-        <label class="radio-option">
-            <input type="radio" name="supporting-policy" checked> Yes
-        </label>
-        <label class="radio-option">
-            <input type="radio" name="supporting-policy"> No
-        </label>
-    </div>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="supporting-policy"> Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="supporting-policy"> No
+                    </label>
+                </div>
     
-    <div class="form-group" style="margin-top: 15px;">
-        <label for="year-founded">Year business founded</label>
-        <input type="text" id="year-founded" value="2016">
-    </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="year-founded">Year business founded</label>
+                    <input type="text" id="year-founded">
+                </div>
     
-    <div class="form-row">
-        <div class="form-group">
-            <label for="fulltime-employees">How many full-time employees do you have?</label>
-            <input type="text" id="fulltime-employees">
-        </div>
-    </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fulltime-employees">How many full-time employees do you have?</label>
+                        <input type="text" id="fulltime-employees">
+                    </div>
+                </div>
     
-    <div class="form-row">
-        <div class="form-group">
-            <label for="part-time-employees">How many part-time employees?</label>
-            <input type="text" id="part-time-employees" value="0">
-        </div>
-        <div class="form-group">
-            <label for="seasonal-employees">How many seasonal employees?</label>
-            <input type="text" id="seasonal-employees">
-        </div>
-    </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="part-time-employees">How many part-time employees?</label>
+                        <input type="text" id="part-time-employees">
+                    </div>
+                    <div class="form-group">
+                        <label for="seasonal-employees">How many seasonal employees?</label>
+                        <input type="text" id="seasonal-employees">
+                    </div>
+                </div>
+            </div>
     
-    <div class="note">
-        Full-time employees are employees, active owners, and leased workers working more than 150 days over the next 12 months.
-        Part-time employees are employees and leased workers working 150 days or fewer over the next 12 months. For contractors
-        and seasonal employees, do not include manual or labor employees.
-    </div>
-</div>
-            
-        <!-- Principal Business Owner Section -->
+              <div class="note">
+                  Full-time employees are employees, active owners, and leased workers working more than 150 days over the next 12 months.
+                  Part-time employees are employees and leased workers working 150 days or fewer over the next 12 months. For contractors
+                  and seasonal employees, do not include manual or labor employees.
+              </div>
+
+              <!-- Principal Business Owner Section -->
         <div class="section">
             <div class="section-header">Principal business owner</div>
             <div class="section-subheader">Items marked with * are required</div>
-            
-            <div class="policy-info">
-                <div>AUTO POLICY#725</div>
-                <div>Account # 00053376</div>
-                
-                <div style="margin-top: 10px;">
-                    <span class="business-icon"></span>
-                    <span>Business Auto</span>
-                </div>
-            </div>
             
             <div style="margin-top: 15px;">
                 <div class="section-header" style="font-size: 16px;">Credit score authorization</div>
@@ -402,19 +444,16 @@
         <!-- Principal Business Owner Details Section (New) -->
         <div class="owner-details-section">
             <div class="section-header">Principal business owner details</div>
-            
-            <div class="small-text">
-                Please complete for the person responsible for the financials and/or day-to-day operations of the business.
-            </div>
-            
+            <div class="small-text">Please complete for the person...</div>
+
             <label class="checkbox-label">
                 <input type="checkbox"> Information is the same as business/DBA named insured
             </label>
-            
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="first-name">First name*</label>
-                    <input type="text" id="first-name" value="Suzy">
+                    <input type="text" id="first-name">
                 </div>
                 <div class="form-group">
                     <label for="middle-initial">Middle initial</label>
@@ -422,45 +461,46 @@
                 </div>
                 <div class="form-group">
                     <label for="last-name">Last name*</label>
-                    <input type="text" id="last-name" value="Atlanta">
+                    <input type="text" id="last-name">
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="date-of-birth">Date of birth*</label>
-                    <input type="text" id="date-of-birth" value="01/01/1965">
+                    <input type="text" id="date-of-birth">
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="home-address">Home address*</label>
-                    <input type="text" id="home-address" value="444 E San Angelo Ave">
+                    <input type="text" id="home-address">
                 </div>
                 <div class="form-group">
                     <label for="apt">Apt./Suite/Unit number</label>
                     <input type="text" id="apt">
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="city">City*</label>
-                    <input type="text" id="city" value="Gilbert">
+                    <input type="text" id="city">
                 </div>
                 <div class="form-group" style="flex: 0.5;">
                     <label for="state">State*</label>
                     <select id="state">
-                        <option selected>AZ</option>
+                        <option value="">-- Select --</option>
+                        <option value="AZ">AZ</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="zip">ZIP Code*</label>
-                    <input type="text" id="zip" value="85234">
+                    <input type="text" id="zip">
                 </div>
             </div>
-            
+
             <div style="margin-top: 15px;">
                 <div>Add principal business owner as a driver?*</div>
                 <div class="radio-group">
@@ -468,23 +508,32 @@
                         <input type="radio" name="owner-as-driver"> Yes
                     </label>
                     <label class="radio-option">
-                        <input type="radio" name="owner-as-driver" checked> No
+                        <input type="radio" name="owner-as-driver"> No
                     </label>
                 </div>
             </div>
+        </div>
             
             <div class="warning-text">
                 If you skip the business owner information, the quoted premium will be inaccurate and subject to change because a
                 default will be used for the credit-based insurance score. To finalize the quote and bind the policy, authorization to obtain
                 consumer report information is required.
             </div>
+        
+            <div class="navigation-buttons">
+                <button class="nav-btn back-btn">Back</button>
+                <button class="nav-btn skip-btn">Skip</button>
+                <button class="nav-btn continue-btn">Save and continue</button>
+            </div>
+
         </div>
         
-        <div class="navigation-buttons">
-            <button class="nav-btn back-btn">Back</button>
-            <button class="nav-btn skip-btn">Skip</button>
-            <button class="nav-btn continue-btn">Save and continue</button>
-        </div>
+           
+
+</div>
+
+       
+        
         
         
     <script>
