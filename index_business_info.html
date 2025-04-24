@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Policy Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .document {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        .section {
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #444;
+        }
+        
+        .section-subheader {
+            font-size: 12px;
+            color: #666;
+            margin-top: -12px;
+            margin-bottom: 15px;
+        }
+        
+        .policy-info {
+            float: right;
+            text-align: right;
+            font-size: 12px;
+            margin-top: -15px;
+        }
+        
+        .form-row {
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            flex: 1;
+            min-width: 200px;
+            margin-right: 15px;
+        }
+        
+        .form-group:last-child {
+            margin-right: 0;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 30px;
+        }
+        
+        .reset-btn {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .radio-group {
+            margin-top: 5px;
+        }
+        
+        .radio-option {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .radio-option input {
+            margin-right: 5px;
+        }
+        
+        .eligibility-question {
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .principal-info {
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .note {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+            margin-top: 10px;
+        }
+        
+        .add-line {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #555;
+            margin-top: 10px;
+        }
+        
+        .add-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+        
+        .instruction {
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .business-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .small-text {
+            font-size: 12px;
+        }
+        
+        .side-tools {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 10px 5px;
+        }
+        
+        .tool-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            cursor: pointer;
+            color: #444;
+            border-radius: 4px;
+        }
+        
+        .tool-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* New styles for the owner details form */
+        .owner-details-section {
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-label input {
+            margin-right: 8px;
+        }
+
+        .warning-text {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #555;
+            margin-top: 15px;
+            padding: 10px 0;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-btn, .skip-btn {
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+
+        .continue-btn {
+            background-color: #a8e4eb;
+            border: 1px solid #a8e4eb;
+        }
+
+        .current-carrier {
+            margin: 30px 0;
+        }
+
+        .current-carrier h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .carrier-instructions {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <!-- Business Information Section - Separated into its own box -->
+<div class="section">
+    <div class="section-header">Business information</div>
+    <div class="section-subheader">Items marked with * are required</div>
+    
+    <div class="form-row">
+        <div class="form-group">
+            <label for="business-desc">Business description or SIC*</label>
+            <select id="business-desc">
+                <option>Candle Or Candleholders Mfrers (SIC No. 3999)</option>
+            </select>
+        </div>
+        <div style="width: 80px; margin-top: 20px;">
+            <button class="reset-btn">Reset</button>
+        </div>
+    </div>
+    
+    <div class="add-line">
+        <div class="add-icon">+</div> Add a Line of Business
+    </div>
+</div>
+            
+            <!-- Eligibility Details Section - Separated into its own box -->
+<div class="section">
+    <div class="section-header">Eligibility details</div>
+    <div class="section-subheader">Items marked with * are required</div>
+    
+    <div class="eligibility-question">
+        Has the customer had 2 or more moving violations or convictions or 2 or more non-negligent accidents within the last 3 years?
+    </div>
+    
+    <div class="radio-group">
+        <label class="radio-option">
+            <input type="radio" name="violations"> Yes
+        </label>
+        <label class="radio-option">
+            <input type="radio" name="violations" checked> No
+        </label>
+    </div>
+    
+    <div class="eligibility-question" style="margin-top: 15px;">
+        Is a supporting policy such as BOP, Package, ML, Property, or Form being quoted or already written with Liberty Mutual? Note, ML is not considered a supporting policy.
+    </div>
+    
+    <div class="radio-group">
+        <label class="radio-option">
+            <input type="radio" name="supporting-policy" checked> Yes
+        </label>
+        <label class="radio-option">
+            <input type="radio" name="supporting-policy"> No
+        </label>
+    </div>
+    
+    <div class="form-group" style="margin-top: 15px;">
+        <label for="year-founded">Year business founded</label>
+        <input type="text" id="year-founded" value="2016">
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group">
+            <label for="fulltime-employees">How many full-time employees do you have?</label>
+            <input type="text" id="fulltime-employees">
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group">
+            <label for="part-time-employees">How many part-time employees?</label>
+            <input type="text" id="part-time-employees" value="0">
+        </div>
+        <div class="form-group">
+            <label for="seasonal-employees">How many seasonal employees?</label>
+            <input type="text" id="seasonal-employees">
+        </div>
+    </div>
+    
+    <div class="note">
+        Full-time employees are employees, active owners, and leased workers working more than 150 days over the next 12 months.
+        Part-time employees are employees and leased workers working 150 days or fewer over the next 12 months. For contractors
+        and seasonal employees, do not include manual or labor employees.
+    </div>
+</div>
+            
+        <!-- Principal Business Owner Section -->
+        <div class="section">
+            <div class="section-header">Principal business owner</div>
+            <div class="section-subheader">Items marked with * are required</div>
+            
+            <div class="policy-info">
+                <div>AUTO POLICY#725</div>
+                <div>Account # 00053376</div>
+                
+                <div style="margin-top: 10px;">
+                    <span class="business-icon"></span>
+                    <span>Business Auto</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <div class="section-header" style="font-size: 16px;">Credit score authorization</div>
+                
+                <div class="small-text" style="margin-bottom: 10px;">
+                    Please provide the following disclosure to the business owner whose credit-based insurance score will be ordered for this quote.
+                </div>
+                
+                <div class="small-text" style="margin-bottom: 10px;">
+                    The agent must provide the following disclosure to the business owner whose credit-based insurance score will be ordered for the
+                    quote. In connection with this application, Liberty Mutual will order your credit-based insurance score from a third party, which is
+                    based on information contained in your credit report. This information will also be used for future renewals of your policy and may
+                    affect your premium. If permitted by applicable law, you can request a review and update to your credit-based insurance score, if there are
+                    errors in your credit rating. By your selection, you authorize the use of this information.
+                </div>
+                
+                <div class="radio-group" style="margin-top: 15px;">
+                    <label class="radio-option">
+                        <input type="radio" name="credit-auth" checked> Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="credit-auth"> No
+                    </label>
+                </div>
+            </div>
+            
+            <div class="add-line">
+                <div class="add-icon">+</div> Add a Line of Business
+            </div>
+        </div>
+        
+        <!-- Principal Business Owner Details Section (New) -->
+        <div class="owner-details-section">
+            <div class="section-header">Principal business owner details</div>
+            
+            <div class="small-text">
+                Please complete for the person responsible for the financials and/or day-to-day operations of the business.
+            </div>
+            
+            <label class="checkbox-label">
+                <input type="checkbox"> Information is the same as business/DBA named insured
+            </label>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first-name">First name*</label>
+                    <input type="text" id="first-name" value="Suzy">
+                </div>
+                <div class="form-group">
+                    <label for="middle-initial">Middle initial</label>
+                    <input type="text" id="middle-initial">
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Last name*</label>
+                    <input type="text" id="last-name" value="Atlanta">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date-of-birth">Date of birth*</label>
+                    <input type="text" id="date-of-birth" value="01/01/1965">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="home-address">Home address*</label>
+                    <input type="text" id="home-address" value="444 E San Angelo Ave">
+                </div>
+                <div class="form-group">
+                    <label for="apt">Apt./Suite/Unit number</label>
+                    <input type="text" id="apt">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City*</label>
+                    <input type="text" id="city" value="Gilbert">
+                </div>
+                <div class="form-group" style="flex: 0.5;">
+                    <label for="state">State*</label>
+                    <select id="state">
+                        <option selected>AZ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="zip">ZIP Code*</label>
+                    <input type="text" id="zip" value="85234">
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <div>Add principal business owner as a driver?*</div>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="owner-as-driver"> Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="owner-as-driver" checked> No
+                    </label>
+                </div>
+            </div>
+            
+            <div class="warning-text">
+                If you skip the business owner information, the quoted premium will be inaccurate and subject to change because a
+                default will be used for the credit-based insurance score. To finalize the quote and bind the policy, authorization to obtain
+                consumer report information is required.
+            </div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <button class="nav-btn back-btn">Back</button>
+            <button class="nav-btn skip-btn">Skip</button>
+            <button class="nav-btn continue-btn">Save and continue</button>
+        </div>
+        
+        
+    <script>
+        // Simple JavaScript to handle button interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reset button functionality
+            const resetBtn = document.querySelector('.reset-btn');
+            resetBtn.addEventListener('click', function() {
+                document.getElementById('business-desc').selectedIndex = 0;
+            });
+            
+            // Add form validation and interactivity as needed
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    // You could add validation or conditional logic here
+                    console.log(`Radio changed: ${this.name} = ${this.checked}`);
+                });
+            });
+            
+            // Add line of business click functionality
+            const addLineButtons = document.querySelectorAll('.add-line');
+            addLineButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    alert('This would open a form to add a new line of business');
+                });
+            });
+            
+            // Continue button functionality
+            const continueBtn = document.querySelector('.continue-btn');
+            continueBtn.addEventListener('click', function() {
+                alert('Form would be submitted and you would proceed to the next step');
+            });
+            
+            // Back button functionality
+            const backBtn = document.querySelector('.back-btn');
+            backBtn.addEventListener('click', function() {
+                alert('You would go back to the previous page');
+            });
+            
+            // Skip button functionality
+            const skipBtn = document.querySelector('.skip-btn');
+            skipBtn.addEventListener('click', function() {
+                alert('You would skip this section and proceed to the next step');
+            });
+        });
+    </script>
+</body>
+</html>
