@@ -99,6 +99,12 @@
             cursor: pointer;
             font-size: 14px;
         }
+
+        .reset-btn:hover {
+            background-color: #e2e8f0;
+            border-color: #aaa;
+            color: #4a5568;
+        }
         
         .radio-group {
             margin-top: 5px;
@@ -291,6 +297,16 @@
     margin-bottom: 40px;
 }
 
+label::after {
+    content: '';
+}
+
+label.required::after {
+    content: ' *';
+    color: red;
+}
+
+
 
     </style>
 </head>
@@ -316,7 +332,7 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="business-desc">Business description or SIC*</label>
+                    <label for="business-desc" class="required">Business description or SIC</label>
                     <select id="business-desc">
                         <option value="">-- Select --</option>
                         <option>Candle Or Candleholders Mfrers (SIC No. 3999)</option>
@@ -431,6 +447,7 @@
         <!-- Principal Business Owner Details Section (New) -->
         <div class="owner-details-section">
             <div class="section-header">Principal business owner details</div>
+            <div class="section-subheader">Items marked with * are required</div>
             <div class="small-text">Please complete for the person...</div>
 
             <label class="checkbox-label">
@@ -439,7 +456,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="first-name">First name*</label>
+                    <label for="first-name" class="required">First name</label>
                     <input type="text" id="first-name">
                 </div>
                 <div class="form-group">
@@ -447,21 +464,21 @@
                     <input type="text" id="middle-initial">
                 </div>
                 <div class="form-group">
-                    <label for="last-name">Last name*</label>
+                    <label for="last-name" class="required">Last name</label>
                     <input type="text" id="last-name">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="date-of-birth">Date of birth*</label>
+                    <label for="date-of-birth" class="required">Date of Birth</label>
                     <input type="text" id="date-of-birth">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="home-address">Home address*</label>
+                    <label for="home-address" class="required">Home Addredd</label>
                     <input type="text" id="home-address">
                 </div>
                 <div class="form-group">
@@ -472,18 +489,18 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="city">City*</label>
+                    <label for="city" class="required">City</label>
                     <input type="text" id="city">
                 </div>
                 <div class="form-group" style="flex: 0.5;">
-                    <label for="state">State*</label>
+                    <label for="state" class="required">State</label>
                     <select id="state">
                         <option value="">-- Select --</option>
                         <option value="AZ">AZ</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="zip">ZIP Code*</label>
+                    <label for="zip" class="required">ZIP Code</label>
                     <input type="text" id="zip">
                 </div>
             </div>
@@ -546,11 +563,41 @@
                 });
             });
             
-            // Continue button functionality
-            const continueBtn = document.querySelector('.continue-btn');
-            continueBtn.addEventListener('click', function() {
-                alert('Form would be submitted and you would proceed to the next step');
-            });
+            // Save and continue button functionality with validation
+const continueBtn = document.querySelector('.continue-btn');
+continueBtn.addEventListener('click', function () {
+    const requiredInputs = [
+        '#first-name',
+        '#last-name',
+        '#date-of-birth',
+        '#home-address',
+        '#city',
+        '#state',
+        '#zip',
+        '#business-desc'
+    ];
+
+    let allFilled = true;
+
+    requiredInputs.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (!el || el.value.trim() === '') {
+            allFilled = false;
+            el.style.border = '2px solid red'; // visually highlight the missing field
+        } else {
+            el.style.border = ''; // reset if valid
+        }
+    });
+
+    if (!allFilled) {
+        alert('Please fill all required fields marked with *');
+        return;
+    }
+
+    // If all fields are valid, proceed
+    window.location.href = 'next_page.html'; // change to your actual next page
+});
+
             
             // Back button functionality
             const backBtn = document.querySelector('.back-btn');
