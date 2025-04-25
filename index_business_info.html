@@ -532,86 +532,81 @@ label.required::after {
 
         </div>
         
-           
-
 </div>
 
      
-    <script>
-        // Simple JavaScript to handle button interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            // Reset button functionality
-            const resetBtn = document.querySelector('.reset-btn');
-            resetBtn.addEventListener('click', function() {
-                document.getElementById('business-desc').selectedIndex = 0;
-            });
-            
-            // Add form validation and interactivity as needed
-            const radioButtons = document.querySelectorAll('input[type="radio"]');
-            radioButtons.forEach(function(radio) {
-                radio.addEventListener('change', function() {
-                    // You could add validation or conditional logic here
-                    console.log(`Radio changed: ${this.name} = ${this.checked}`);
-                });
-            });
-            
-            // Add line of business click functionality
-            const addLineButtons = document.querySelectorAll('.add-line');
-            addLineButtons.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    alert('This would open a form to add a new line of business');
-                });
-            });
-            
-            // Save and continue button functionality with validation
-const continueBtn = document.querySelector('.continue-btn');
-continueBtn.addEventListener('click', function () {
-    const requiredInputs = [
-        '#first-name',
-        '#last-name',
-        '#date-of-birth',
-        '#home-address',
-        '#city',
-        '#state',
-        '#zip',
-        '#business-desc'
-    ];
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Reset button functionality
+        const resetBtn = document.querySelector('.reset-btn');
+        resetBtn.addEventListener('click', function () {
+            document.getElementById('business-desc').selectedIndex = 0;
+        });
 
-    let allFilled = true;
-
-    requiredInputs.forEach(selector => {
-        const el = document.querySelector(selector);
-        if (!el || el.value.trim() === '') {
-            allFilled = false;
-            el.style.border = '2px solid red'; // visually highlight the missing field
-        } else {
-            el.style.border = ''; // reset if valid
-        }
-    });
-
-    if (!allFilled) {
-        alert('Please fill all required fields marked with *');
-        return;
-    }
-
-    // If all fields are valid, proceed
-    window.location.href = 'next_page.html'; // change to your actual next page
-});
-
-            
-            // Back button functionality
-            const backBtn = document.querySelector('.back-btn');
-            backBtn.addEventListener('click', function() {
-                window.location.href = 'index_quote_details.html';
-            });
-
-            
-            // Skip button functionality
-            const skipBtn = document.querySelector('.skip-btn');
-            skipBtn.addEventListener('click', function() {
-                alert('You would skip this section and proceed to the next step');
+        // Radio button change logging
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                console.log(`Radio changed: ${this.name} = ${this.checked}`);
             });
         });
-    </script>
+
+        // Add line of business click functionality
+        const addLineButtons = document.querySelectorAll('.add-line');
+        addLineButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                alert('This would open a form to add a new line of business');
+            });
+        });
+
+        // Save and continue button functionality with validation and thank you popup
+        const continueBtn = document.querySelector('.continue-btn');
+        continueBtn.addEventListener('click', function () {
+            const requiredInputs = [
+                '#first-name',
+                '#last-name',
+                '#date-of-birth',
+                '#home-address',
+                '#city',
+                '#state',
+                '#zip',
+                '#business-desc'
+            ];
+
+            let allFilled = true;
+
+            requiredInputs.forEach(selector => {
+                const el = document.querySelector(selector);
+                if (!el || el.value.trim() === '') {
+                    allFilled = false;
+                    el.style.border = '2px solid red'; // highlight
+                } else {
+                    el.style.border = ''; // reset
+                }
+            });
+
+            if (!allFilled) {
+                alert('Please fill all required fields marked with *');
+                return;
+            }
+
+            // Success behavior: Thank You popup
+            alert('Thank you! Your information has been saved.');
+        });
+
+        // Back button functionality
+        const backBtn = document.querySelector('.back-btn');
+        backBtn.addEventListener('click', function () {
+            window.location.href = 'index_quote_details.html';
+        });
+
+        // Skip button functionality
+        const skipBtn = document.querySelector('.skip-btn');
+        skipBtn.addEventListener('click', function () {
+            alert('You would skip this section and proceed to the next step');
+        });
+    });
+</script>
+
 </body>
 </html>
