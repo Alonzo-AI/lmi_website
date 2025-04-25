@@ -43,12 +43,6 @@
             margin-bottom: 15px;
         }
         
-        .policy-info {
-            float: right;
-            text-align: right;
-            font-size: 12px;
-            margin-top: -15px;
-        }
         
         .form-row {
             margin-bottom: 15px;
@@ -261,36 +255,7 @@
             margin-bottom: 10px;
         }
 
-        /* Styles for the separate policy info box */
-.policy-info-box {
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    padding: 15px;
-    margin-bottom: 30px;
-    width: 250px;
-    float: right;
-    clear: right;
-    margin-left: 20px;
-}
-
-/* Ensure the business icon displays correctly */
-.business-icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-
-/* Fix layout breakages from form changes */
-.section::after {
-    content: "";
-    display: table;
-    clear: both;
-}
+        
 
 /* Optional: force consistent vertical spacing */
 .section {
@@ -439,23 +404,49 @@ label.required::after {
             font-weight: bold;
         }
 
+
+/* Wrap .document and sidebar in a relative container */
+.page-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: block;
+}
+
+/* Sidebar that sits next to the document */
+.policy-sidebar {
+    position: absolute;
+    top: 20px;
+    right: 150px;
+    width: 250px;
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+
     </style>
 </head>
 <body>
+
+    <div class="layout-wrapper">
+        <!-- Policy Box Sidebar -->
+        <div class="policy-sidebar">
+          <div class="section-header">Policy Information</div>
+          <div>AUTO POLICY#725</div>
+          <div>Account # 00053376</div>
+          <div style="margin-top: 10px;">
+              <span class="business-icon"></span>
+              <span>Business Auto</span>
+          </div>
+        </div>
+
+        
     <div class="document">
 
-         <!-- Standalone Policy Info Box - Completely separate from Principal business owner -->
-<div class="section policy-info-box">
-    <div class="section-header">Policy Information</div>
-    
-    <div>AUTO POLICY#725</div>
-    <div>Account # 00053376</div>
-    
-    <div style="margin-top: 10px;">
-        <span class="business-icon"></span>
-        <span>Business Auto</span>
-    </div>
-</div>
         <!-- Business Information Section - Separated into its own box -->
         <div class="section">
             <div class="section-header">Business information</div>
