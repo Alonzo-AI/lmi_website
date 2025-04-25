@@ -546,12 +546,13 @@
             isValid = false;
         }
         
-        // Validate ZIP code
-        const zipCode = document.getElementById('zip-code');
-        if (!zipCode.value.trim() || !zipCode.checkValidity()) {
-            showError(zipCode, 'zip-code-error');
-            isValid = false;
-        }
+        // Validate ZIP code (5 or 6 digits)
+const zipCode = document.getElementById('zip-code');
+if (!zipCode.value.trim() || !/^\d{5,6}$/.test(zipCode.value)) {
+    showError(zipCode, 'zip-code-error');
+    isValid = false;
+}
+
         
         // Validate business description
         const businessDescription = document.getElementById('business-description');
