@@ -427,6 +427,132 @@ label.required::after {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
+/* Popup overlay styles */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup content box */
+.popup-content {
+  background-color: #fff;
+  width: 400px;
+  max-width: 90%;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: popupFadeIn 0.3s ease-out;
+}
+
+/* Popup header with close button */
+.popup-header {
+  padding: 10px 15px;
+  text-align: right;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.close-popup {
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-popup:hover {
+  color: #333;
+}
+
+/* Popup body content */
+.popup-body {
+  padding: 30px;
+  text-align: center;
+}
+
+.success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background-color: #a8e4eb;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.popup-body h2 {
+  margin: 0 0 15px;
+  color: #333;
+  font-size: 24px;
+}
+
+.popup-body p {
+  margin: 0 0 25px;
+  color: #666;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Continue button styling */
+.popup-btn {
+  padding: 10px 30px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+.popup-btn.continue-btn {
+  background-color: #a8e4eb;
+  color: #333;
+  border: 1px solid #a8e4eb;
+}
+
+.popup-btn.continue-btn:hover {
+  background-color: #8fd6de;
+  border-color: #8fd6de;
+}
+
+/* Animation for popup appearance */
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation for popup disappearance */
+@keyframes popupFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.popup-closing {
+  animation: popupFadeOut 0.3s ease-out forwards;
+}
+
 
     </style>
 </head>
@@ -675,6 +801,21 @@ label.required::after {
                 <button class="nav-btn continue-btn">Save and continue</button>
             </div>
 
+            
+<div id="thank-you-popup" class="popup-overlay">
+    <div class="popup-content">
+      <div class="popup-header">
+        <span class="close-popup">&times;</span>
+      </div>
+      <div class="popup-body">
+        <div class="success-icon">✓</div>
+        <h2>Thank You!</h2>
+        <p>Your information has been successfully saved.</p>
+        <button class="popup-btn continue-btn">Continue</button>
+      </div>
+    </div>
+  </div>
+
         </div>
         
 </div>
@@ -704,7 +845,7 @@ label.required::after {
             });
         });
 
-        // Save and continue button functionality with validation and thank you popup
+        // Save and continue button functionality with validation
         const continueBtn = document.querySelector('.continue-btn');
         continueBtn.addEventListener('click', function () {
             const requiredInputs = [
@@ -735,8 +876,7 @@ label.required::after {
                 return;
             }
 
-            // Success behavior: Thank You popup
-            alert('Thank you! Your information has been saved.');
+          
         });
 
         // Back button functionality
@@ -917,6 +1057,87 @@ label.required::after {
             // Initialize calendar
             updateCalendar();
         });
+
+        // Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+  // Get references to elements
+  const continueBtn = document.querySelector('.continue-btn');
+  const popupOverlay = document.getElementById('thank-you-popup');
+  const closePopupBtn = document.querySelector('.close-popup');
+  const popupContinueBtn = document.querySelector('.popup-btn.continue-btn');
+  const popupContent = document.querySelector('.popup-content');
+  
+  // Function to show popup
+  function showPopup() {
+    popupOverlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent scrolling behind popup
+  }
+  
+  // Function to close popup
+  function closePopup() {
+    popupContent.classList.add('popup-closing');
+    
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+      popupOverlay.style.display = 'none';
+      popupContent.classList.remove('popup-closing');
+      document.body.style.overflow = ''; // Restore scrolling
+    }, 300);
+  }
+  
+  // Event listener for "Save and continue" button
+  continueBtn.addEventListener('click', function () {
+    const requiredInputs = [
+      '#first-name',
+      '#last-name',
+      '#date-of-birth',
+      '#home-address',
+      '#city',
+      '#state',
+      '#zip',
+      '#business-desc'
+    ];
+
+    let allFilled = true;
+
+    requiredInputs.forEach(selector => {
+      const el = document.querySelector(selector);
+      if (!el || el.value.trim() === '') {
+        allFilled = false;
+        el.style.border = '2px solid red'; // highlight
+      } else {
+        el.style.border = ''; // reset
+      }
+    });
+
+    if (!allFilled) {
+      // Traditional alert for validation errors
+      alert('Please fill all required fields marked with *');
+      return;
+    }
+
+    // Show the thank you popup instead of alert
+    showPopup();
+  });
+  
+  // Event listeners for closing popup
+  closePopupBtn.addEventListener('click', closePopup);
+  popupContinueBtn.addEventListener('click', closePopup);
+  
+  // Also close when clicking outside the popup content
+  popupOverlay.addEventListener('click', function(e) {
+    if (e.target === popupOverlay) {
+      closePopup();
+    }
+  });
+  
+  // Close popup when pressing Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && popupOverlay.style.display === 'flex') {
+      closePopup();
+    }
+  });
+});
 
 </script>
 
